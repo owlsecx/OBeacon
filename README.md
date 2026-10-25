@@ -18,13 +18,18 @@
 
 ## 📌 Overview
 
-OBeacon is a security and privacy tool from the OwlSec suite.
+OBeacon finds malware beaconing: hosts that contact a command-and-control server at regular intervals. It reads common log formats or watches live connections, groups traffic by destination, and scores each group on timing regularity, periodicity and payload consistency. Each score comes with an explanation and an estimate of the sleep and jitter values.
 
 ---
 
 ## ✨ Features
 
-- Standalone executable, no Python installation needed.
+- Reads plain text, syslog, Apache/Nginx/proxy, Zeek conn.log (TSV and JSON), CSV and JSON-lines logs
+- Groups by destination, src→dst pair or dst:port; analyzes whole log directories
+- Multi-factor beacon score: interval regularity (MAD), harmonic periodicity, Bowley skew, count and payload-size consistency
+- Cobalt Strike-style sleep/jitter estimate, interval histogram and timeline sparkline
+- Live monitor of /proc/net/tcp that names and scores the process behind each connection
+- Allow-list (IPs, CIDRs, domains), private-IP filter, sample generator and --json output for SIEM pipelines
 
 ---
 
@@ -38,8 +43,13 @@ OBeacon is a security and privacy tool from the OwlSec suite.
 ## 🚀 Usage
 
 ```bash
-./OBeacon
+./OBeacon                                    # interactive menu
+./OBeacon --file conn.log --group pair --min 10
+./OBeacon --dir /var/log/proxy --ignore-private
+./OBeacon --live -t 600
 ```
+
+Run `./OBeacon --help` for the full list of options.
 
 ---
 
